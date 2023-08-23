@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import './App.css';
 import TOC from "./components/TOC";
 import Content from "./components/Content"
+import Subject from "./components/Subject";
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            selected_content_id: 2,
             mode: 'read',
             subject: {title: 'WEBBBBB', sub: 'Sub title!!!!!'},
             welcome: {title: 'Welcome', desc: 'Hello React!!'},
@@ -29,19 +31,30 @@ class App extends Component {
             _title = this.state.welcome.title;
             _desc = this.state.welcome.desc;
         } else if (this.state.mode === 'read') {
-            _title = this.state.contents[0].title;
-            _desc = this.state.contents[0].desc;
+            let i = 0;
+            while (i < this.state.contents.length) {
+                let data = this.state.contents[i];
+                if (data.id === this.state.selected_content_id) {
+                    _title = data.title;
+                    _desc = data.desc;
+                    break;
+                }
+
+                i = i + 1;
+            }
         }
         return (
             <div className="App">
-                {/*<Subject
+                <Subject
                     title={this.state.subject.title}
                     sub={this.state.subject.sub}
-                    onClick={function() {
-                        this.state.mode = 'read'
-                    }}>
-                </Subject>*/}
-                <header>
+                    onChangePage={function () {
+                        this.setState({
+                            mode: 'welcome'
+                        });
+                    }.bind(this)}>
+                </Subject>
+                {/*<header>
                     <h1><a href="/" onClick={function (e) {
                         console.log(e);
 
@@ -60,8 +73,15 @@ class App extends Component {
                         // bind() 호출하면 넘겨주는 파라미터 값을 해당 함수의 this로 설정하여 새로운 함수를 만듦
                     }.bind(this)}>{this.state.subject.title}</a></h1>
                     {this.state.subject.sub}
-                </header>
-                <TOC data={this.state.contents}></TOC>
+                </header>*/}
+                <TOC
+                    onChangePage={function (id) {
+                        this.setState({
+                            mode: 'read',
+                            selected_content_id: Number(id)
+                        })
+                    }.bind(this)}
+                    data={this.state.contents}></TOC>
                 <Content title={_title} desc={_desc}></Content>
             </div>
         );
