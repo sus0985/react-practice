@@ -44,14 +44,20 @@ class App extends Component {
                 <header>
                     <h1><a href="/" onClick={function (e) {
                         console.log(e);
+
+                        // 해당 태그의 기본 동작을 막는 역할
                         e.preventDefault();
-                        // function 내부의 this는 컴포넌트가 아니라 아무값도 가리키지 않음
+
+                        // 아래의 방식으로 mode를 바꾸면 리액트에서 값 변화에 대해 알아차리지 못함 => render 호출하지 않음
                         // this.state.mode = 'welcome';
+
+                        // 그래서 setState 함수를 통해 값을 바꿔주기
                         this.setState({
                             mode: 'welcome'
                         });
 
                         // .bind(this) 를 통해 function 내부의 this == Component 설정
+                        // bind() 호출하면 넘겨주는 파라미터 값을 해당 함수의 this로 설정하여 새로운 함수를 만듦
                     }.bind(this)}>{this.state.subject.title}</a></h1>
                     {this.state.subject.sub}
                 </header>
